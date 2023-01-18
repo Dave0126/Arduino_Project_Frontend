@@ -9,7 +9,7 @@
 <!--    <TableComponents></TableComponents>-->
     <Container></Container>
     <el-footer style="text-align: center">
-      This is a simple course project demo, powered by <a href="https://vuejs.org/">Vue.js</a> and <a href="https://element.eleme.io/#/en-US">Element UI</a>
+      This is a simple course project demo, powered by <a href="https://vuejs.org/">Vue.js</a> and <a href="https://element.eleme.io/#/en-US">Element UI</a>. Adopting <a href="https://github.com/Dave0126/Arduino_Project_Frontend">front-end</a> and <a href="https://github.com/Dave0126/Project_Arduino_Backend">back-end</a> separate development.
       <br/>
       Create by <a href="https://github.com/Dave0126/">Guohao</a>, 2023
     </el-footer>
@@ -50,6 +50,6 @@ export default {
   background-color: #FFFFFF;
   color: #333;
   text-align: center;
-  line-height: 60px;
+  line-height: 30px;
 }
 </style>

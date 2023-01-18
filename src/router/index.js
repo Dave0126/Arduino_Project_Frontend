@@ -28,7 +28,7 @@ const routes = [
         component:Index,
         children:[
             {
-                path:"/pageOne",
+                path:"/register",
                 name:"Register",
                 component:Register
             },
