@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import TableComponents from "@/components/TableComponents";
 import Search from "@/components/SearchProduct";
 import Register from "@/components/Register";
-import PageTwo from "@/components/PageTwo";
 import Index from "@/components/index"
 
 Vue.use(VueRouter);
@@ -13,17 +12,12 @@ const routes = [
         path:"/",
         name:"Product",
         component:Index,
-        redirect:"/pageOne",
+        redirect:"/searchProduct",
         children:[
             {
                 path:"/searchProduct",
                 name:"Search Product",
                 component:Search
-            },
-            {
-                path:"/pageTwo",
-                name:"第二页",
-                component:PageTwo
             }
         ]
     },

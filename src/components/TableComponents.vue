@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h4 align="left">Please enter the user name and the barcode of the product:</h4>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm1">
       <el-form-item label="UserName" prop="name">
         <el-input type="text" v-model="ruleForm.name" autocomplete="off"></el-input>
@@ -10,7 +11,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">SUBMIT</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">ADD</el-button>
         <el-button @click="resetForm('ruleForm')">RESET</el-button>
       </el-form-item>
     </el-form>
@@ -57,9 +58,13 @@ export default {
             }
           }).then(res => res.data).then(res => {
             if (res.resultCode == 20011) {
-              this.tableData = res.data.productList
+              this.tableData = res.data.productList;
+              this.$message({
+                message: res.msg,
+                type: 'success'
+              });
             } else {
-              alert(res.msg)
+              this.$message.error(res.msg);
             }
             console.log(res)
           });

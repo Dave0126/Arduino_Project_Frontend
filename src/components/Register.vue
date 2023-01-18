@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h4 align="left">Please register as an user: </h4>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="UserName" prop="name">
         <el-input type="text" v-model="ruleForm.name" autocomplete="off"></el-input>
@@ -10,7 +11,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">SUBMIT</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">REGISTER</el-button>
         <el-button @click="resetForm('ruleForm')">RESET</el-button>
       </el-form-item>
     </el-form>
@@ -68,7 +69,14 @@ export default {
           console.log(this.ruleForm);
           axios.post("http://localhost:8888/arduino_project/user/register", this.ruleForm).then(res => res.data).then(res =>{
             console.log(res);
-            alert(res.msg);
+            if (res.resultCode == 10031) {
+              this.$message({
+                message: res.msg,
+                type: 'success'
+              });
+            } else {
+              this.$message.error(res.msg);
+            }
           });
         } else {
           console.log('error submit!!');

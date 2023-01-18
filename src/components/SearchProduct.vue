@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h4 align="left">Please enter the barcode of the product you want to query :</h4>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm1">
 
       <el-form-item label="BarCode" prop="barcode">
@@ -7,27 +8,45 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">SUBMIT</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">SEARCH</el-button>
         <el-button @click="resetForm('ruleForm')">RESET</el-button>
       </el-form-item>
     </el-form>
 
-    <el-descriptions title="垂直带边框列表" direction="vertical" :column="4" border>
-      <el-descriptions-item label="Product Name">{{productName}}</el-descriptions-item>
-      <el-descriptions-item label="BarCode" :span="2">18100000000</el-descriptions-item>
-      <el-descriptions-item label="居住地">苏州市</el-descriptions-item>
-      <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
+    <el-descriptions title="Basic Info." direction="vertical" :column="3" border>
+      <el-descriptions-item label="Product Name">{{product.name}}</el-descriptions-item>
+      <el-descriptions-item label="BarCode">{{product.barcode}}</el-descriptions-item>
+      <el-descriptions-item label="Quantity">{{product.quantity}}</el-descriptions-item>
+
+      <el-descriptions-item label="Nutriments.energy">{{product.nutriments.energy}}</el-descriptions-item>
+      <el-descriptions-item label="Nutriments.carbohydrates">{{product.nutriments.carbohydrates}}</el-descriptions-item>
+      <el-descriptions-item label="Nutriments.calcium">{{product.nutriments.calcium}}</el-descriptions-item>
     </el-descriptions>
 
-    <el-descriptions class="margin-top" title="垂直无边框列表" :column="4" direction="vertical">
-      <el-descriptions-item label="用户名">kooriookami</el-descriptions-item>
-      <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
-      <el-descriptions-item label="居住地" :span="2">苏州市</el-descriptions-item>
-      <el-descriptions-item label="备注">
-        <el-tag size="small">学校</el-tag>
-      </el-descriptions-item>
-      <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
-    </el-descriptions>
+    <h4 align="left">Ingredients Info.</h4>
+    <el-table
+        :data="product.ingredients"
+        stripe
+        border
+        style="width: 100%">
+      <el-table-column
+          prop="rank"
+          label="Order of predominance">
+      </el-table-column>
+      <el-table-column
+          prop="id"
+          label="Material">
+      </el-table-column>
+      <el-table-column
+          prop="vegan"
+          label="IsVegan?">
+      </el-table-column>
+      <el-table-column
+          prop="vegetarian"
+          label="IsVegetarian?">
+      </el-table-column>
+    </el-table>
+
   </div>
 </template>
 
@@ -51,14 +70,26 @@ export default {
     };
 
     return {
-      productName:'',
       ruleForm: {
         barcode: ''
       },
+
       rules: {
         barcode: [
           { validator: checkBarCode, trigger: 'blur' }
         ]
+      },
+
+      product: {
+        name:'',
+        barcode:'',
+        quantity:'',
+        nutriments: {
+          calcium:'',
+          carbohydrates:'',
+          energy:''
+        },
+        ingredients:[]
       }
     };
   },
@@ -73,10 +104,14 @@ export default {
               barcode: this.ruleForm.barcode
             }
           }).then(res => res.data).then(res => {
-            if (res.resultCode == 20011) {
-              this.productName = res.msg;
+            if (res.resultCode == 20041) {
+              this.product = res.data;
+              this.$message({
+                message: res.msg,
+                type: 'success'
+              });
             } else {
-              alert(res.msg)
+              this.$message.error(res.msg);
             }
             console.log(res)
           });
