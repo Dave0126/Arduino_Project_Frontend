@@ -16,6 +16,30 @@
       </el-form-item>
     </el-form>
 
+    <el-divider></el-divider>
+
+    <h4 align="left">Daily Nutrition Info.</h4>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <el-progress type="circle" :percentage="percentage_Energy" :color="customColorMethod"></el-progress>
+        <h5 align="center"><b>Energy</b> : {{dailyNutrition.dailyEnergy}} KCal <sup>[1]</sup></h5>
+        <small align="center"><sup>[1]</sup> The daily <b>Energy</b> intake recommended by WHO is <b>2500</b> KCal</small>
+      </el-col>
+      <el-col :span="8">
+        <el-progress type="circle" :percentage="percentage_Calcium" :color="customColorMethod"></el-progress>
+        <h5 align="center"><b>Calcium</b> : {{dailyNutrition.dailyCalcium}} g <sup>[2]</sup></h5>
+        <small align="center"><sup>[2]</sup> The daily <b>Calcium</b> intake recommended by WHO is <b>10</b> g</small>
+      </el-col>
+      <el-col :span="8">
+        <el-progress type="circle" :percentage="percentage_Carbohydrates" :color="customColorMethodForCarbohydrates"></el-progress>
+        <h5 align="center"><b>Carbohydrates</b> : {{dailyNutrition.dailyCarbohydrates}} g <sup>[3]</sup></h5>
+        <small align="center"><sup>[3]</sup> The WHO recommended daily intake of <b>Carbohydrates</b> is <b>10%</b> of <b>total energy intake</b></small>
+      </el-col>
+    </el-row>
+
+    <el-divider></el-divider>
+
+    <h4 align="left">Daily Intake of Products Info.</h4>
     <el-table
         :data="tableData"
         stripe
@@ -25,16 +49,16 @@
           label="Product Name">
       </el-table-column>
       <el-table-column
-          prop="code"
+          prop="barcode"
           label="BarCode">
       </el-table-column>
       <el-table-column
           prop="quantity"
-          label="Qte">
+          label="Quantity">
       </el-table-column>
       <el-table-column
           prop="nutriments.energy"
-          label="Energy per 100ml/g">
+          label="Energy (Kcal/100g)">
       </el-table-column>
     </el-table>
   </div>
@@ -59,6 +83,29 @@ export default {
           }).then(res => res.data).then(res => {
             if (res.resultCode == 20011) {
               this.tableData = res.data.productList;
+
+              this.dailyNutrition.dailyEnergy = res.data.dailyEnergy;
+              this.dailyNutrition.dailyCalcium = res.data.dailyCalcium;
+              this.dailyNutrition.dailyCarbohydrates = res.data.dailyCarbohydrates;
+
+              this.percentage_Energy = Math.ceil(res.data.dailyEnergy/2500*100);
+              if(this.percentage_Energy > 70 && this.percentage_Energy < 90) {
+                this.$notify({
+                  title: 'WARNING',
+                  message: 'Today\'s energy intake is about to reach the recommended value',
+                  type: 'warning'
+                });
+              } else if(this.percentage_Energy >= 90) {
+                this.$notify({
+                  title: 'ALARM',
+                  message: 'Please manage your energy intake',
+                  type: 'error'
+                });
+              }
+
+              this.percentage_Calcium = Math.ceil(res.data.dailyCalcium/10*100);
+              this.percentage_Carbohydrates = Math.ceil(res.data.dailyCarbohydrates / res.data.dailyEnergy*100);
+
               this.$message({
                 message: res.msg,
                 type: 'success'
@@ -76,6 +123,24 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    customColorMethod(percentage) {
+      if (percentage < 70) {
+        return '#67c23a';
+      } else if(percentage < 90) {
+        return '#e6a23c';
+      } else {
+        return '#ff0000';
+      }
+    },
+    customColorMethodForCarbohydrates(percentage) {
+      if (percentage < 8) {
+        return '#67c23a';
+      } else if(percentage >= 8 && percentage <= 10) {
+        return '#e6a23c';
+      } else {
+        return '#ff0000';
+      }
     }
   },
 
@@ -106,6 +171,14 @@ export default {
 
     return {
       tableData: [],
+      dailyNutrition: {
+        dailyEnergy: '',
+        dailyCalcium: '',
+        dailyCarbohydrates: ''
+      },
+      percentage_Energy:'',
+      percentage_Calcium:'',
+      percentage_Carbohydrates:'',
       ruleForm: {
         name: '',
         barcode: ''
@@ -122,3 +195,26 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-dark {
+  background: #99a9bf;
+}
+.bg-purple {
+  background: #d3dce6;
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+</style>
