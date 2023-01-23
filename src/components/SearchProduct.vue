@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h4 align="left">Please enter the barcode of the product you want to query :</h4>
+    <h4 align="left">Please scan the barcode of the product you want to query :</h4>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm1">
 
       <el-form-item label="BarCode" prop="barcode">
-        <el-input v-model.number="ruleForm.barcode"></el-input>
+        <el-input v-model.number="ruleForm.barcode" placeholder="Scan for BarCode"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -18,9 +18,9 @@
       <el-descriptions-item label="BarCode">{{product.barcode}}</el-descriptions-item>
       <el-descriptions-item label="Quantity">{{product.quantity}}</el-descriptions-item>
 
-      <el-descriptions-item label="Nutriments.energy">{{product.nutriments.energy}}</el-descriptions-item>
-      <el-descriptions-item label="Nutriments.carbohydrates">{{product.nutriments.carbohydrates}}</el-descriptions-item>
-      <el-descriptions-item label="Nutriments.calcium">{{product.nutriments.calcium}}</el-descriptions-item>
+      <el-descriptions-item label="Nutriments.energy">{{product.nutriments.energy}} KCal</el-descriptions-item>
+      <el-descriptions-item label="Nutriments.carbohydrates">{{product.nutriments.carbohydrates}} g</el-descriptions-item>
+      <el-descriptions-item label="Nutriments.calcium">{{product.nutriments.calcium}} g</el-descriptions-item>
     </el-descriptions>
 
     <h4 align="left">Ingredients Info.</h4>

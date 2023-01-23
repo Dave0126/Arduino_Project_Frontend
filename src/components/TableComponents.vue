@@ -1,13 +1,14 @@
 <template>
   <div>
-    <h4 align="left">Please enter the user name and the barcode of the product:</h4>
+<!--    <h4 align="left">Please enter the user name and the barcode of the product:</h4>-->
+    <h4 align="left">Please enter the user name :</h4>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm1">
       <el-form-item label="UserName" prop="name">
         <el-input type="text" v-model="ruleForm.name" autocomplete="off"></el-input>
       </el-form-item>
 
       <el-form-item label="BarCode" prop="barcode">
-        <el-input v-model.number="ruleForm.barcode"></el-input>
+        <el-input v-model.number="ruleForm.barcode" placeholder="Scan for BarCode"></el-input>
       </el-form-item>
 
       <el-form-item>
